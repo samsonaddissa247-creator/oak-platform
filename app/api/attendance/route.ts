@@ -1,7 +1,31 @@
 import { NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabase";
+import { hasSupabaseConfig, mockParticipants, supabaseAdmin } from "@/lib/supabase";
 
 export async function GET() {
+  if (!hasSupabaseConfig) {
+    const participants = [...mockParticipants.values()].sort(
+      (a, b) => new Date(b.registration_date).getTime() - new Date(a.registration_date).getTime()
+    );
+
+    const total = participants.length;
+    const checkedIn = participants.filter((p) => p.attendance_status === "checked_in").length;
+    const roleBreakdown: Record<string, number> = {};
+
+    for (const p of participants) {
+      roleBreakdown[p.role] = (roleBreakdown[p.role] || 0) + 1;
+    }
+
+    return NextResponse.json({
+      stats: {
+        totalRegistered: total,
+        totalAttendees: checkedIn,
+        attendancePercentage: total ? Math.round((checkedIn / total) * 100) : 0,
+        roleBreakdown,
+      },
+      participants,
+    });
+  }
+
   const db = supabaseAdmin();
 
   const { data: participants, error } = await db

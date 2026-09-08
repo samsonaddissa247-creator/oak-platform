@@ -14,12 +14,19 @@ interface Row {
   check_in_time: string | null;
 }
 
+interface AttendanceStats {
+  totalRegistered: number;
+  totalAttendees: number;
+  attendancePercentage: number;
+  roleBreakdown: Record<string, number>;
+}
+
 export default function AttendancePage() {
   const [rows, setRows] = useState<Row[]>([]);
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState<AttendanceStats | null>(null);
   const [search, setSearch] = useState("");
-  const [roleFilter, setRoleFilter] = useState<string>("all");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [roleFilter, setRoleFilter] = useState<UserRole | "all">("all");
+  const [statusFilter, setStatusFilter] = useState<"checked_in" | "not_checked_in" | "all">("all");
 
   useEffect(() => {
     fetch("/api/attendance")
@@ -84,7 +91,11 @@ export default function AttendancePage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <select className="input w-40" value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)}>
+          <select
+            className="input w-40"
+            value={roleFilter}
+            onChange={(e) => setRoleFilter(e.target.value as UserRole | "all")}
+          >
             <option value="all">All roles</option>
             {Object.entries(ROLE_LABELS).map(([key, label]) => (
               <option key={key} value={key}>
@@ -95,7 +106,9 @@ export default function AttendancePage() {
           <select
             className="input w-44"
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={(e) =>
+              setStatusFilter(e.target.value as "checked_in" | "not_checked_in" | "all")
+            }
           >
             <option value="all">All statuses</option>
             <option value="checked_in">Checked in</option>

@@ -194,7 +194,7 @@ export default function RegisterPage() {
             checked={form.consent}
             onChange={(e) => update("consent", e.target.checked)}
           />
-          I agree to OAK Foundation's privacy policy and consent to my registration
+          I agree to OAK Foundation&apos;s privacy policy and consent to my registration
           data being used for event coordination.
         </label>
 

@@ -1,16 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { QRCodeCanvas } from "qrcode.react";
 import { Participant } from "@/lib/types";
 
 export default function QrCodePage() {
-  const [participant, setParticipant] = useState<Participant | null>(null);
-
-  useEffect(() => {
-    const raw = sessionStorage.getItem("oak_participant");
-    if (raw) setParticipant(JSON.parse(raw));
-  }, []);
+  const [participant] = useState<Participant | null>(() => {
+    if (typeof window === "undefined") return null;
+    const raw = window.sessionStorage.getItem("oak_participant");
+    return raw ? (JSON.parse(raw) as Participant) : null;
+  });
 
   if (!participant) {
     return (
@@ -35,7 +34,7 @@ export default function QrCodePage() {
       <div className="rounded-2xl bg-gradient-to-br from-[#0f1f3d] to-[#16305c] text-white p-8">
         <p className="text-xs uppercase tracking-wide text-slate-300">Registration Complete</p>
         <h1 className="text-3xl font-extrabold mt-1">
-          You're Registered, {participant.first_name}!
+          You&apos;re Registered, {participant.first_name}!
         </h1>
         <p className="text-slate-300 mt-1">{participant.organisation}</p>
       </div>

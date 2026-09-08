@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { UserRole, canAccess } from "@/lib/types";
+import { ACCESS_MATRIX, UserRole, canAccess } from "@/lib/types";
 
-const NAV_ITEMS: { href: string; label: string; page: string; icon: string }[] = [
+const NAV_ITEMS: { href: string; label: string; page: keyof typeof ACCESS_MATRIX; icon: string }[] = [
   { href: "/register", label: "Register", page: "registration", icon: "👤" },
   { href: "/qr-code", label: "QR Code", page: "qr_code_page", icon: "▦" },
   { href: "/program", label: "Programme", page: "program_page", icon: "📅" },
@@ -26,7 +26,7 @@ export default function Sidebar({ role }: { role: UserRole | null }) {
       </div>
 
       <nav className="space-y-1">
-        {NAV_ITEMS.filter((item) => canAccess(item.page as any, role)).map((item) => {
+        {NAV_ITEMS.filter((item) => canAccess(item.page, role)).map((item) => {
           const active = pathname === item.href;
           return (
             <Link

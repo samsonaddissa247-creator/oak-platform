@@ -1,11 +1,37 @@
 import { NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabase";
+import { hasSupabaseConfig, mockParticipants, supabaseAdmin } from "@/lib/supabase";
 
 export async function POST(req: Request) {
   const { qrCodeId } = await req.json();
 
   if (!qrCodeId) {
     return NextResponse.json({ ok: false, reason: "invalid" }, { status: 400 });
+  }
+
+  if (!hasSupabaseConfig) {
+    const participant = [...mockParticipants.values()].find((p) => p.qr_code_id === qrCodeId);
+
+    if (!participant) {
+      return NextResponse.json({ ok: false, reason: "not_found" }, { status: 404 });
+    }
+
+    const today = new Date().toISOString().slice(0, 10);
+
+    if (participant.attendance_status === "checked_in" && participant.check_in_date === today) {
+      return NextResponse.json({ ok: false, reason: "duplicate", participant }, { status: 409 });
+    }
+
+    const now = new Date().toISOString();
+    const updated = {
+      ...participant,
+      attendance_status: "checked_in" as const,
+      check_in_time: now,
+      check_in_date: today,
+    };
+
+    mockParticipants.set(participant.id, updated);
+
+    return NextResponse.json({ ok: true, participant: updated });
   }
 
   const db = supabaseAdmin();

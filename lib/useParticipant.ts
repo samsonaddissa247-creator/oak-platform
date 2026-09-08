@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Participant } from "./types";
 
 // Reads the participant stashed in sessionStorage at registration time.
@@ -8,14 +8,11 @@ import { Participant } from "./types";
 // sessions before this goes to production, especially for the Coordination
 // Team role, which needs a proper login (see brief: "admin authentication").
 export function useParticipant() {
-  const [participant, setParticipant] = useState<Participant | null>(null);
-  const [loaded, setLoaded] = useState(false);
+  const [participant] = useState<Participant | null>(() => {
+    if (typeof window === "undefined") return null;
+    const raw = window.sessionStorage.getItem("oak_participant");
+    return raw ? (JSON.parse(raw) as Participant) : null;
+  });
 
-  useEffect(() => {
-    const raw = sessionStorage.getItem("oak_participant");
-    if (raw) setParticipant(JSON.parse(raw));
-    setLoaded(true);
-  }, []);
-
-  return { participant, role: participant?.role ?? null, loaded };
+  return { participant, role: participant?.role ?? null, loaded: true };
 }

@@ -48,7 +48,7 @@ export default function ProgramPage() {
       <div className="space-y-3">
         {SCHEDULE[activeDay].sessions.length === 0 && (
           <p className="text-slate-400 text-sm text-center py-8">
-            Schedule for this day hasn't been published yet.
+            Schedule for this day hasn&apos;t been published yet.
           </p>
         )}
         {SCHEDULE[activeDay].sessions.map((s, idx) => {
