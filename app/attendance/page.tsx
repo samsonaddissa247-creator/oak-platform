@@ -18,7 +18,7 @@ interface AttendanceStats {
   totalRegistered: number;
   totalAttendees: number;
   attendancePercentage: number;
-  roleBreakdown: Record<string, number>;
+  roleBreakdown: Partial<Record<UserRole, number>>;
 }
 
 export default function AttendancePage() {
@@ -27,6 +27,7 @@ export default function AttendancePage() {
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState<UserRole | "all">("all");
   const [statusFilter, setStatusFilter] = useState<"checked_in" | "not_checked_in" | "all">("all");
+  const roleEntries = Object.entries(ROLE_LABELS) as [UserRole, string][];
 
   useEffect(() => {
     fetch("/api/attendance")
@@ -71,10 +72,10 @@ export default function AttendancePage() {
             Role Breakdown
           </p>
           <div className="grid grid-cols-5 gap-3 text-center">
-            {Object.entries(ROLE_LABELS).map(([key, label]) => (
+            {roleEntries.map(([key, label]) => (
               <div key={key} className="bg-slate-50 rounded-xl py-3">
                 <div className="text-xl font-bold text-slate-900">
-                  {stats.roleBreakdown[key] || 0}
+                  {stats.roleBreakdown[key] ?? 0}
                 </div>
                 <div className="text-xs text-slate-500">{label}</div>
               </div>
