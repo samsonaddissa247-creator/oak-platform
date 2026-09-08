@@ -112,7 +112,7 @@ create policy "partners are publicly readable" on partner_orgs
   for select to anon, authenticated using (true);
 
 create policy "session notes are publicly readable" on session_notes
-  for select to anon, authenticated using (true);
+  for select to anon, authenticated using (true); 
 
 create policy "anyone can add a session note" on session_notes
   for insert to anon, authenticated with check (true);
