@@ -2,19 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CalendarDays, ClipboardCheck, LayoutGrid, QrCode, UserRound, UsersRound, type LucideIcon } from "lucide-react";
-import { ACCESS_MATRIX, UserRole, canAccess } from "@/lib/types";
+import { CalendarDays, ClipboardCheck, LayoutGrid, UsersRound, type LucideIcon } from "lucide-react";
 
-const NAV_ITEMS: { href: string; label: string; page: keyof typeof ACCESS_MATRIX; icon: LucideIcon }[] = [
-  { href: "/register", label: "Register", page: "registration", icon: UserRound },
-  { href: "/qr-code", label: "QR Code", page: "qr_code_page", icon: QrCode },
-  { href: "/program", label: "Programme", page: "program_page", icon: CalendarDays },
-  { href: "/partners", label: "Partners", page: "partners_page", icon: LayoutGrid },
-  { href: "/check-in", label: "Check In", page: "check_in_page", icon: ClipboardCheck },
-  { href: "/attendance", label: "Attendance", page: "attendance_page", icon: UsersRound },
+const NAV_ITEMS: { href: string; label: string; icon: LucideIcon }[] = [
+  { href: "/check-in", label: "Check In", icon: ClipboardCheck },
+  { href: "/program", label: "Programme", icon: CalendarDays },
+  { href: "/partners", label: "Partners", icon: LayoutGrid },
+  { href: "/attendance", label: "Attendance", icon: UsersRound },
 ];
 
-export default function Sidebar({ role }: { role: UserRole | null }) {
+export default function Sidebar() {
   const pathname = usePathname();
 
   return (
@@ -27,7 +24,7 @@ export default function Sidebar({ role }: { role: UserRole | null }) {
       </div>
 
       <nav className="flex flex-wrap gap-2 lg:block lg:space-y-1">
-        {NAV_ITEMS.filter((item) => canAccess(item.page, role)).map((item) => {
+        {NAV_ITEMS.map((item) => {
           const active = pathname === item.href;
           const Icon = item.icon;
           return (
