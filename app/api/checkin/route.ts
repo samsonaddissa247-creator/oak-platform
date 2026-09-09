@@ -34,40 +34,44 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, participant: updated });
   }
 
-  const db = supabaseAdmin();
+  try {
+    const db = supabaseAdmin();
 
-  const { data: participant, error } = await db
-    .from("participants")
-    .select("*")
-    .eq("qr_code_id", qrCodeId)
-    .single();
+    const { data: participant, error } = await db
+      .from("participants")
+      .select("*")
+      .eq("qr_code_id", qrCodeId)
+      .single();
 
-  if (error || !participant) {
-    return NextResponse.json({ ok: false, reason: "not_found" }, { status: 404 });
+    if (error || !participant) {
+      return NextResponse.json({ ok: false, reason: "not_found" }, { status: 404 });
+    }
+
+    const today = new Date().toISOString().slice(0, 10);
+
+    if (participant.attendance_status === "checked_in" && participant.check_in_date === today) {
+      return NextResponse.json({ ok: false, reason: "duplicate", participant }, { status: 409 });
+    }
+
+    const now = new Date().toISOString();
+
+    const { data: updated, error: updateError } = await db
+      .from("participants")
+      .update({
+        attendance_status: "checked_in",
+        check_in_time: now,
+        check_in_date: today,
+      })
+      .eq("id", participant.id)
+      .select()
+      .single();
+
+    if (updateError) {
+      return NextResponse.json({ ok: false, reason: "network_error" }, { status: 503 });
+    }
+
+    return NextResponse.json({ ok: true, participant: updated });
+  } catch {
+    return NextResponse.json({ ok: false, reason: "network_error" }, { status: 503 });
   }
-
-  const today = new Date().toISOString().slice(0, 10);
-
-  if (participant.attendance_status === "checked_in" && participant.check_in_date === today) {
-    return NextResponse.json({ ok: false, reason: "duplicate", participant }, { status: 409 });
-  }
-
-  const now = new Date().toISOString();
-
-  const { data: updated, error: updateError } = await db
-    .from("participants")
-    .update({
-      attendance_status: "checked_in",
-      check_in_time: now,
-      check_in_date: today,
-    })
-    .eq("id", participant.id)
-    .select()
-    .single();
-
-  if (updateError) {
-    return NextResponse.json({ ok: false, reason: "network_error" }, { status: 500 });
-  }
-
-  return NextResponse.json({ ok: true, participant: updated });
 }
