@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowRight, CalendarDays, LayoutGrid } from "lucide-react";
 import { useParticipant } from "@/lib/useParticipant";
 import { ROLE_LABELS } from "@/lib/types";
 
@@ -23,15 +24,29 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <Link href="/program" className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition">
-          <div className="text-2xl mb-2">📅</div>
-          <p className="font-bold text-slate-900">Programme</p>
-          <p className="text-sm text-slate-500">View the event schedule</p>
+        <Link href="/program" className="group rounded-2xl bg-white p-5 shadow-sm transition hover:shadow-md sm:p-6">
+          <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-[#0f1f3d]">
+            <CalendarDays aria-hidden="true" className="h-5 w-5" />
+          </div>
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="font-bold text-slate-900">Programme</p>
+              <p className="text-sm text-slate-500">View the event schedule</p>
+            </div>
+            <ArrowRight aria-hidden="true" className="h-4 w-4 text-slate-400 transition group-hover:translate-x-1" />
+          </div>
         </Link>
-        <Link href="/partners" className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition">
-          <div className="text-2xl mb-2">🌐</div>
-          <p className="font-bold text-slate-900">Partners</p>
-          <p className="text-sm text-slate-500">Browse the partner directory</p>
+        <Link href="/partners" className="group rounded-2xl bg-white p-5 shadow-sm transition hover:shadow-md sm:p-6">
+          <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-[#0f1f3d]">
+            <LayoutGrid aria-hidden="true" className="h-5 w-5" />
+          </div>
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="font-bold text-slate-900">Partners</p>
+              <p className="text-sm text-slate-500">Browse the partner directory</p>
+            </div>
+            <ArrowRight aria-hidden="true" className="h-4 w-4 text-slate-400 transition group-hover:translate-x-1" />
+          </div>
         </Link>
       </div>
     </div>

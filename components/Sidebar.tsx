@@ -2,15 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { CalendarDays, ClipboardCheck, LayoutGrid, QrCode, UserRound, UsersRound, type LucideIcon } from "lucide-react";
 import { ACCESS_MATRIX, UserRole, canAccess } from "@/lib/types";
 
-const NAV_ITEMS: { href: string; label: string; page: keyof typeof ACCESS_MATRIX; icon: string }[] = [
-  { href: "/register", label: "Register", page: "registration", icon: "👤" },
-  { href: "/qr-code", label: "QR Code", page: "qr_code_page", icon: "▦" },
-  { href: "/program", label: "Programme", page: "program_page", icon: "📅" },
-  { href: "/partners", label: "Partners", page: "partners_page", icon: "🌐" },
-  { href: "/check-in", label: "Check In", page: "check_in_page", icon: "⌗" },
-  { href: "/attendance", label: "Attendance", page: "attendance_page", icon: "▤" },
+const NAV_ITEMS: { href: string; label: string; page: keyof typeof ACCESS_MATRIX; icon: LucideIcon }[] = [
+  { href: "/register", label: "Register", page: "registration", icon: UserRound },
+  { href: "/qr-code", label: "QR Code", page: "qr_code_page", icon: QrCode },
+  { href: "/program", label: "Programme", page: "program_page", icon: CalendarDays },
+  { href: "/partners", label: "Partners", page: "partners_page", icon: LayoutGrid },
+  { href: "/check-in", label: "Check In", page: "check_in_page", icon: ClipboardCheck },
+  { href: "/attendance", label: "Attendance", page: "attendance_page", icon: UsersRound },
 ];
 
 export default function Sidebar({ role }: { role: UserRole | null }) {
@@ -28,6 +29,7 @@ export default function Sidebar({ role }: { role: UserRole | null }) {
       <nav className="flex flex-wrap gap-2 lg:block lg:space-y-1">
         {NAV_ITEMS.filter((item) => canAccess(item.page, role)).map((item) => {
           const active = pathname === item.href;
+          const Icon = item.icon;
           return (
             <Link
               key={item.href}
@@ -38,7 +40,7 @@ export default function Sidebar({ role }: { role: UserRole | null }) {
                   : "text-blue-50 hover:bg-white/10 lg:text-slate-600 lg:hover:bg-slate-100"
               }`}
             >
-              <span className="w-4 text-center">{item.icon}</span>
+              <Icon aria-hidden="true" className="h-4 w-4 shrink-0" strokeWidth={1.8} />
               {item.label}
             </Link>
           );

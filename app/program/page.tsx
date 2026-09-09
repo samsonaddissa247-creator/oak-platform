@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { CalendarDays, MapPin } from "lucide-react";
 
 const SCHEDULE = [
   {
@@ -36,6 +37,7 @@ export default function ProgramPage() {
               activeDay === i ? "bg-[#0f1f3d] text-white" : "bg-white text-slate-700"
             }`}
           >
+            <CalendarDays aria-hidden="true" className="mb-2 h-4 w-4 opacity-80" />
             <div className="text-xs uppercase opacity-70">{d.day.split(" ")[0]}</div>
             <div className="font-bold">{d.day}</div>
             <div className="text-xs opacity-70">{d.date}</div>
@@ -58,7 +60,10 @@ export default function ProgramPage() {
                   <p className="text-xs font-mono text-slate-500">{s.time}</p>
                   <p className="font-bold text-slate-900">{s.title}</p>
                   {s.speaker && <p className="text-sm text-slate-500">{s.speaker}</p>}
-                  <p className="text-xs text-slate-400 mt-1">📍 {s.venue}</p>
+                  <p className="mt-1 flex items-center gap-1 text-xs text-slate-400">
+                    <MapPin aria-hidden="true" className="h-3 w-3" />
+                    {s.venue}
+                  </p>
                 </div>
               </div>
               <textarea

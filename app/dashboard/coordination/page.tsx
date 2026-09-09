@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowRight, CalendarDays, ClipboardCheck, LayoutGrid, UsersRound } from "lucide-react";
 import { useParticipant } from "@/lib/useParticipant";
 
 const TOOLS = [
-  { href: "/check-in", label: "Check In", desc: "Scan attendee QR codes at the door", icon: "⌗" },
-  { href: "/attendance", label: "Attendance", desc: "Live headcount and participant list", icon: "▤" },
-  { href: "/program", label: "Programme", desc: "View and edit the event schedule", icon: "📅" },
-  { href: "/partners", label: "Partners", desc: "View and edit the partner directory", icon: "🌐" },
+  { href: "/check-in", label: "Check In", desc: "Scan attendee QR codes at the door", icon: ClipboardCheck },
+  { href: "/attendance", label: "Attendance", desc: "Live headcount and participant list", icon: UsersRound },
+  { href: "/program", label: "Programme", desc: "View and edit the event schedule", icon: CalendarDays },
+  { href: "/partners", label: "Partners", desc: "View and edit the partner directory", icon: LayoutGrid },
 ];
 
 export default function CoordinationDashboard() {
@@ -29,11 +30,18 @@ export default function CoordinationDashboard() {
           <Link
             key={t.href}
             href={t.href}
-            className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition"
+            className="group rounded-2xl bg-white p-5 shadow-sm transition hover:shadow-md sm:p-6"
           >
-            <div className="text-2xl mb-2">{t.icon}</div>
-            <p className="font-bold text-slate-900">{t.label}</p>
-            <p className="text-sm text-slate-500">{t.desc}</p>
+            <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-[#0f1f3d]">
+              <t.icon aria-hidden="true" className="h-5 w-5" />
+            </div>
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="font-bold text-slate-900">{t.label}</p>
+                <p className="text-sm text-slate-500">{t.desc}</p>
+              </div>
+              <ArrowRight aria-hidden="true" className="h-4 w-4 shrink-0 text-slate-400 transition group-hover:translate-x-1" />
+            </div>
           </Link>
         ))}
       </div>
