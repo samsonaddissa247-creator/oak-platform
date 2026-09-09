@@ -13,7 +13,6 @@ export const ROLE_LABELS: Record<UserRole, string> = {
   observer: "Observer",
 };
 
-// Where each role lands right after registering
 export const ROLE_LANDING: Record<UserRole, string> = {
   partner: "/qr-code",
   oak_staff: "/dashboard",
@@ -22,7 +21,6 @@ export const ROLE_LANDING: Record<UserRole, string> = {
   coordination_team: "/dashboard/coordination",
 };
 
-// Page access matrix, mirrors the spec exactly
 export const ACCESS_MATRIX: Record<string, UserRole[]> = {
   registration: ["partner", "oak_staff", "presenter", "observer", "coordination_team"],
   qr_code_page: ["partner"],

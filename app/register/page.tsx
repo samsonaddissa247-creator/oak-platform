@@ -54,8 +54,9 @@ export default function RegisterPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
+        cache: "no-store",
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
         setError(data.error || "Something went wrong. Please try again.");
@@ -63,7 +64,6 @@ export default function RegisterPage() {
         return;
       }
 
-      // Stash the participant so the next page can render without re-fetching
       sessionStorage.setItem("oak_participant", JSON.stringify(data.participant));
       router.push(data.redirectTo);
     } catch {
@@ -73,16 +73,16 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex-1 px-6 py-8 max-w-2xl mx-auto w-full">
-      <div className="rounded-2xl bg-[#0f1f3d] text-white p-8 mb-6">
-        <h1 className="text-3xl font-extrabold">Partner Convening 2026</h1>
-        <p className="text-slate-300 mt-1">Harare · 9–11 Nov 2026</p>
+    <div className="mx-auto w-full max-w-2xl px-3 py-5 sm:px-6 sm:py-8">
+      <div className="mb-6 rounded-2xl bg-[#0f1f3d] p-5 text-white sm:p-8">
+        <h1 className="text-2xl font-extrabold sm:text-3xl">Partner Convening 2026</h1>
+        <p className="mt-1 text-sm text-slate-300 sm:text-base">Harare · 9–11 Nov 2026</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 shadow-sm space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6 rounded-2xl bg-white p-4 shadow-sm sm:p-6">
         <h2 className="text-lg font-bold text-slate-900">Registration Form</h2>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
           <Field label="First Name" required>
             <input
               required
@@ -135,7 +135,7 @@ export default function RegisterPage() {
           </select>
         </Field>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Email Address" required>
             <input
               required

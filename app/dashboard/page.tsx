@@ -10,7 +10,7 @@ export default function DashboardPage() {
   if (!loaded) return null;
 
   return (
-    <div className="flex-1 px-6 py-8 max-w-2xl mx-auto w-full space-y-6">
+    <div className="mx-auto w-full max-w-2xl space-y-6 px-3 py-5 sm:px-6 sm:py-8">
       <div>
         <h1 className="text-2xl font-extrabold text-slate-900">
           Welcome{participant ? `, ${participant.first_name}` : ""}
@@ -22,7 +22,7 @@ export default function DashboardPage() {
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4 sm:grid-cols-2">
         <Link href="/program" className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition">
           <div className="text-2xl mb-2">📅</div>
           <p className="font-bold text-slate-900">Programme</p>

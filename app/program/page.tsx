@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 
-// Placeholder schedule — replace with a `sessions` table + Supabase query
-// once the programme content is finalised.
 const SCHEDULE = [
   {
     day: "Day 1",
@@ -23,13 +21,13 @@ export default function ProgramPage() {
   const [notes, setNotes] = useState<Record<string, string>>({});
 
   return (
-    <div className="flex-1 px-6 py-8 max-w-3xl mx-auto w-full space-y-6">
+    <div className="mx-auto w-full max-w-3xl space-y-6 px-3 py-5 sm:px-6 sm:py-8">
       <div>
         <h1 className="text-2xl font-extrabold text-slate-900">Programme</h1>
-        <p className="text-slate-500 text-sm">OAK Partner Convening 2026</p>
+        <p className="text-sm text-slate-500">OAK Partner Convening 2026</p>
       </div>
 
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-3">
         {SCHEDULE.map((d, i) => (
           <button
             key={d.day}

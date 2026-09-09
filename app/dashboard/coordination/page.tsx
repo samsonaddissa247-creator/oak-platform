@@ -16,7 +16,7 @@ export default function CoordinationDashboard() {
   if (!loaded) return null;
 
   return (
-    <div className="flex-1 px-6 py-8 max-w-2xl mx-auto w-full space-y-6">
+    <div className="mx-auto w-full max-w-2xl space-y-6 px-3 py-5 sm:px-6 sm:py-8">
       <div>
         <h1 className="text-2xl font-extrabold text-slate-900">
           Coordination Team{participant ? ` — ${participant.first_name}` : ""}
@@ -24,7 +24,7 @@ export default function CoordinationDashboard() {
         <p className="text-slate-500 text-sm">Event control centre</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4 sm:grid-cols-2">
         {TOOLS.map((t) => (
           <Link
             key={t.href}

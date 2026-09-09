@@ -30,12 +30,39 @@ export default function AttendancePage() {
   const roleEntries = Object.entries(ROLE_LABELS) as [UserRole, string][];
 
   useEffect(() => {
-    fetch("/api/attendance")
-      .then((r) => r.json())
-      .then((d) => {
-        setRows(d.participants || []);
-        setStats(d.stats);
-      });
+    let active = true;
+
+    const load = async () => {
+      try {
+        const res = await fetch("/api/attendance", {
+          cache: "no-store",
+          headers: { Accept: "application/json" },
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (!active) return;
+
+        if (!res.ok) {
+          setRows([]);
+          setStats(null);
+          return;
+        }
+
+        setRows(data.participants || []);
+        setStats(data.stats || null);
+      } catch {
+        if (active) {
+          setRows([]);
+          setStats(null);
+        }
+      }
+    };
+
+    load();
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   const filtered = useMemo(() => {
@@ -52,14 +79,14 @@ export default function AttendancePage() {
   }, [rows, search, roleFilter, statusFilter]);
 
   return (
-    <div className="flex-1 px-6 py-8 max-w-5xl mx-auto w-full space-y-6">
+    <div className="mx-auto w-full max-w-5xl space-y-6 px-3 py-5 sm:px-6 sm:py-8">
       <div>
         <h1 className="text-2xl font-extrabold text-slate-900">Attendance</h1>
-        <p className="text-slate-500 text-sm">Check-in tracking · 9–11 November 2026</p>
+        <p className="text-sm text-slate-500">Check-in tracking · 9–11 November 2026</p>
       </div>
 
       {stats && (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid gap-4 sm:grid-cols-3">
           <StatCard label="Expected" value={stats.totalRegistered} />
           <StatCard label="Checked In" value={stats.totalAttendees} />
           <StatCard label="Attendance %" value={`${stats.attendancePercentage}%`} />
@@ -71,7 +98,7 @@ export default function AttendancePage() {
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-3">
             Role Breakdown
           </p>
-          <div className="grid grid-cols-5 gap-3 text-center">
+          <div className="grid grid-cols-2 gap-3 text-center sm:grid-cols-3 lg:grid-cols-5">
             {roleEntries.map(([key, label]) => (
               <div key={key} className="bg-slate-50 rounded-xl py-3">
                 <div className="text-xl font-bold text-slate-900">
@@ -84,8 +111,8 @@ export default function AttendancePage() {
         </div>
       )}
 
-      <div className="bg-white rounded-2xl p-4 shadow-sm space-y-3">
-        <div className="flex gap-3">
+      <div className="space-y-3 rounded-2xl bg-white p-4 shadow-sm">
+        <div className="flex flex-col gap-3 lg:flex-row">
           <input
             className="input flex-1"
             placeholder="Search name or organisation…"
@@ -93,7 +120,7 @@ export default function AttendancePage() {
             onChange={(e) => setSearch(e.target.value)}
           />
           <select
-            className="input w-40"
+            className="input w-full lg:w-40"
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value as UserRole | "all")}
           >
@@ -105,7 +132,7 @@ export default function AttendancePage() {
             ))}
           </select>
           <select
-            className="input w-44"
+            className="input w-full lg:w-44"
             value={statusFilter}
             onChange={(e) =>
               setStatusFilter(e.target.value as "checked_in" | "not_checked_in" | "all")
@@ -117,7 +144,8 @@ export default function AttendancePage() {
           </select>
         </div>
 
-        <table className="w-full text-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[620px] text-sm">
           <thead>
             <tr className="text-left text-slate-500 border-b border-slate-100">
               <th className="py-2">Name</th>
@@ -153,13 +181,14 @@ export default function AttendancePage() {
             ))}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={5} className="text-center text-slate-400 py-8">
+                <td colSpan={5} className="py-8 text-center text-slate-400">
                   No matching participants.
                 </td>
               </tr>
             )}
           </tbody>
-        </table>
+          </table>
+        </div>
       </div>
     </div>
   );

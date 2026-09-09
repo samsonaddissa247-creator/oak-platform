@@ -30,10 +30,10 @@ export default function QrCodePage() {
   }
 
   return (
-    <div className="flex-1 px-6 py-8 max-w-2xl mx-auto w-full space-y-6">
-      <div className="rounded-2xl bg-gradient-to-br from-[#0f1f3d] to-[#16305c] text-white p-8">
+    <div className="mx-auto w-full max-w-2xl space-y-6 px-3 py-5 sm:px-6 sm:py-8">
+      <div className="rounded-2xl bg-gradient-to-br from-[#0f1f3d] to-[#16305c] p-5 text-white sm:p-8">
         <p className="text-xs uppercase tracking-wide text-slate-300">Registration Complete</p>
-        <h1 className="text-3xl font-extrabold mt-1">
+        <h1 className="mt-1 text-2xl font-extrabold sm:text-3xl">
           You&apos;re Registered, {participant.first_name}!
         </h1>
         <p className="text-slate-300 mt-1">{participant.organisation}</p>

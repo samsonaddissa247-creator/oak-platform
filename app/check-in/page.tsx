@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 import { Participant } from "@/lib/types";
 
@@ -20,32 +20,36 @@ export default function CheckInPage() {
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const [state, setState] = useState<ScanState>({ status: "idle" });
   const [manualCode, setManualCode] = useState("");
-  const [scanning, setScanning] = useState(false);
+  const scanningRef = useRef(false);
 
-  async function handleScan(qrCodeId: string) {
-    if (scanning) return;
-    setScanning(true);
+  const handleScan = useCallback(async (qrCodeId: string) => {
+    if (scanningRef.current) return;
+    scanningRef.current = true;
+
     try {
       const res = await fetch("/api/checkin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ qrCodeId }),
+        cache: "no-store",
       });
-      const data = await res.json();
-      if (data.ok) {
-        setState({ status: "success", participant: data.participant });
-      } else {
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data.ok) {
         setState({ status: "error", reason: REASON_COPY[data.reason] || "Check-in failed" });
+        return;
       }
+
+      setState({ status: "success", participant: data.participant });
     } catch {
       setState({ status: "error", reason: REASON_COPY.network_error });
     } finally {
-      setScanning(false);
+      scanningRef.current = false;
     }
-  }
+  }, []);
 
   useEffect(() => {
-    if (state.status !== "idle") return; // pause camera while a result is shown
+    if (state.status !== "idle") return;
 
     const el = document.getElementById("qr-reader");
     if (!el) return;
@@ -61,7 +65,7 @@ export default function CheckInPage() {
           scanner.pause(true);
           handleScan(decodedText);
         },
-        () => {} // ignore per-frame scan failures
+        () => {}
       )
       .catch(() => {
         setState({ status: "error", reason: "Camera unavailable — use manual entry below." });
@@ -70,8 +74,7 @@ export default function CheckInPage() {
     return () => {
       scanner.stop().catch(() => {});
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.status]);
+  }, [state.status, handleScan]);
 
   function reset() {
     setState({ status: "idle" });
@@ -79,21 +82,21 @@ export default function CheckInPage() {
   }
 
   return (
-    <div className="flex-1 px-6 py-8 max-w-2xl mx-auto w-full space-y-6">
+    <div className="mx-auto w-full max-w-2xl space-y-6 px-3 py-5 sm:px-6 sm:py-8">
       <div>
         <h1 className="text-2xl font-extrabold text-slate-900">Event Check-In</h1>
-        <p className="text-slate-500 text-sm">Scan an attendee QR code to check them in</p>
+        <p className="text-sm text-slate-500">Scan an attendee QR code to check them in</p>
       </div>
 
       {state.status === "idle" && (
         <>
           <div id="qr-reader" className="rounded-2xl overflow-hidden bg-slate-900 aspect-square" />
 
-          <div className="bg-white rounded-2xl p-4 shadow-sm space-y-2">
+          <div className="space-y-2 rounded-2xl bg-white p-4 shadow-sm">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
               Manual Code Entry
             </p>
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-2 sm:flex-row">
               <input
                 className="input flex-1"
                 placeholder="OAK-2026-XXXX-XXXX"
@@ -146,7 +149,7 @@ function SuccessCard({
       </div>
       <button
         onClick={onNext}
-        className="w-full rounded-xl bg-[#0f1f3d] text-white font-semibold py-3"
+        className="w-full rounded-xl bg-[#0f1f3d] py-3 font-semibold text-white"
       >
         Scan Next Attendee
       </button>

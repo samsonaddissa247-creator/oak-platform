@@ -33,8 +33,8 @@ export default function PartnerDetailPage() {
   if (!partner) return <div className="flex-1 p-8 text-slate-400">Loading…</div>;
 
   return (
-    <div className="flex-1 px-6 py-8 max-w-2xl mx-auto w-full space-y-6">
-      <button onClick={() => router.back()} className="text-slate-500 text-sm">
+    <div className="mx-auto w-full max-w-2xl space-y-6 px-3 py-5 sm:px-6 sm:py-8">
+      <button onClick={() => router.back()} className="text-sm text-slate-500">
         ‹ Partner Directory
       </button>
 

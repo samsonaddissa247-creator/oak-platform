@@ -17,22 +17,22 @@ export default function Sidebar({ role }: { role: UserRole | null }) {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 shrink-0 border-r border-slate-200 bg-white min-h-screen px-4 py-6">
-      <div className="mb-8 px-2">
+    <aside className="border-b border-slate-200 bg-white px-3 py-4 lg:sticky lg:top-0 lg:min-h-screen lg:w-64 lg:shrink-0 lg:border-b-0 lg:border-r lg:px-4 lg:py-6">
+      <div className="mb-4 px-2 lg:mb-8">
         <div className="text-xl font-extrabold tracking-tight text-slate-900">OAK</div>
-        <div className="text-xs uppercase tracking-wide text-slate-500 mt-1">
+        <div className="mt-1 text-xs uppercase tracking-wide text-slate-500">
           Partner Convening 2026
         </div>
       </div>
 
-      <nav className="space-y-1">
+      <nav className="flex flex-wrap gap-2 lg:block lg:space-y-1">
         {NAV_ITEMS.filter((item) => canAccess(item.page, role)).map((item) => {
           const active = pathname === item.href;
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
+              className={`flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
                 active
                   ? "bg-[#0f1f3d] text-white"
                   : "text-slate-600 hover:bg-slate-100"
@@ -45,7 +45,7 @@ export default function Sidebar({ role }: { role: UserRole | null }) {
         })}
       </nav>
 
-      <div className="absolute bottom-6 left-4 right-4 px-2 text-xs text-slate-500">
+      <div className="mt-4 px-2 text-xs text-slate-500 lg:absolute lg:bottom-6 lg:left-4 lg:right-4 lg:mt-0">
         <div className="font-medium text-slate-700">Harare, Zimbabwe</div>
         <div>9–11 November 2026</div>
       </div>

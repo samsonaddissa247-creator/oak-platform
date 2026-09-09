@@ -33,10 +33,10 @@ export default function PartnersPage() {
   );
 
   return (
-    <div className="flex-1 px-6 py-8 max-w-3xl mx-auto w-full space-y-6">
+    <div className="mx-auto w-full max-w-3xl space-y-6 px-3 py-5 sm:px-6 sm:py-8">
       <div>
         <h1 className="text-2xl font-extrabold text-slate-900">Partner Directory</h1>
-        <p className="text-slate-500 text-sm">{partners.length} partner organisations</p>
+        <p className="text-sm text-slate-500">{partners.length} partner organisations</p>
       </div>
 
       <input
