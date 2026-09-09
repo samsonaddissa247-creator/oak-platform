@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { CalendarDays, Layers3, UsersRound } from "lucide-react";
 import { UserRole, ROLE_LABELS } from "@/lib/types";
 
 const ROLE_OPTIONS: UserRole[] = [
@@ -73,14 +74,35 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-3 py-5 sm:px-6 sm:py-8">
-      <div className="mb-6 rounded-2xl bg-[#0f1f3d] p-5 text-white sm:p-8">
-        <h1 className="text-2xl font-extrabold sm:text-3xl">Partner Convening 2026</h1>
-        <p className="mt-1 text-sm text-slate-300 sm:text-base">Harare · 9–11 Nov 2026</p>
+    <div className="mx-auto w-full max-w-3xl px-3 py-5 sm:px-6 sm:py-8">
+      <div className="mb-3 rounded-2xl bg-[#162e55] p-5 text-white shadow-sm sm:p-6">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-200">
+          OAK Foundation
+        </p>
+        <div className="mt-2 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+          <div>
+            <h1 className="text-2xl font-extrabold leading-tight sm:text-3xl">Partner Convening 2026</h1>
+            <p className="mt-1 text-sm text-blue-100">Harare · 9–11 March 2026</p>
+          </div>
+          <span className="w-fit rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100">
+            Registration open
+          </span>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6 rounded-2xl bg-white p-4 shadow-sm sm:p-6">
-        <h2 className="text-lg font-bold text-slate-900">Registration Form</h2>
+      <div className="mb-5 grid grid-cols-3 gap-2 sm:gap-3">
+        <EventStat icon={UsersRound} value="110+" label="Attendees" />
+        <EventStat icon={CalendarDays} value="24" label="Sessions" />
+        <EventStat icon={Layers3} value="38" label="Partners" />
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-5 rounded-2xl bg-white p-4 shadow-sm sm:p-6">
+        <div className="border-b border-slate-100 pb-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
+            Event access
+          </p>
+          <h2 className="mt-1 text-lg font-bold text-slate-900">Registration Form</h2>
+        </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="First Name" required>
@@ -154,8 +176,8 @@ export default function RegisterPage() {
           </Field>
         </div>
 
-        <div className="bg-slate-50 rounded-xl p-4 space-y-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+        <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
             Requirements
           </p>
           <Field label="Dietary Requirements">
@@ -187,7 +209,7 @@ export default function RegisterPage() {
           </Field>
         </div>
 
-        <label className="flex items-start gap-3 text-sm text-slate-600">
+        <label className="flex items-start gap-3 rounded-xl border border-slate-200 px-3 py-3 text-sm text-slate-600">
           <input
             type="checkbox"
             className="mt-1"
@@ -205,11 +227,32 @@ export default function RegisterPage() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full rounded-xl bg-[#0f1f3d] text-white font-semibold py-3 disabled:opacity-60"
+          className="w-full rounded-xl bg-[#162e55] py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0f1f3d] disabled:opacity-60"
         >
-          {submitting ? "Registering…" : "Register"}
+          {submitting ? "Registering…" : "Register & Generate QR Code"}
         </button>
       </form>
+      <p className="mt-3 text-center text-[11px] text-slate-400">
+        Your data is securely handled by OAK Foundation in accordance with GDPR.
+      </p>
+    </div>
+  );
+}
+
+function EventStat({
+  icon: Icon,
+  value,
+  label,
+}: {
+  icon: typeof UsersRound;
+  value: string;
+  label: string;
+}) {
+  return (
+    <div className="rounded-xl bg-white p-3 shadow-sm sm:p-4">
+      <Icon aria-hidden="true" className="h-4 w-4 text-[#7894bc]" strokeWidth={1.8} />
+      <p className="mt-2 text-lg font-extrabold leading-none text-[#162e55] sm:text-xl">{value}</p>
+      <p className="mt-1 text-[10px] uppercase tracking-wide text-slate-400">{label}</p>
     </div>
   );
 }
