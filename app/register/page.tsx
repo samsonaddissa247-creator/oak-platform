@@ -82,7 +82,7 @@ export default function RegisterPage() {
         <div className="mt-2 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
           <div>
             <h1 className="text-2xl font-extrabold leading-tight sm:text-3xl">Partner Convening 2026</h1>
-            <p className="mt-1 text-sm text-blue-100">Harare · 9–11 March 2026</p>
+            <p className="mt-1 text-sm text-blue-100">Harare · 9–11 November 2026</p>
           </div>
           <span className="w-fit rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100">
             Registration open
@@ -205,6 +205,15 @@ export default function RegisterPage() {
               placeholder="e.g. Flight from London, hotel needed"
               value={form.travel_requirements}
               onChange={(e) => update("travel_requirements", e.target.value)}
+            />
+          </Field>
+          <Field label="Accommodation Requirements">
+            <textarea
+              className="input"
+              rows={2}
+              placeholder="e.g. Single room, 2 nights"
+              value={form.accommodation_requirements}
+              onChange={(e) => update("accommodation_requirements", e.target.value)}
             />
           </Field>
         </div>

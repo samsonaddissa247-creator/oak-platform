@@ -151,6 +151,7 @@ export default function AttendancePage() {
               <th className="py-2">Name</th>
               <th>Organisation</th>
               <th>Role</th>
+              <th>Registered</th>
               <th>Status</th>
               <th>Check-in Time</th>
             </tr>
@@ -163,6 +164,9 @@ export default function AttendancePage() {
                 </td>
                 <td className="text-slate-600">{r.organisation}</td>
                 <td className="text-slate-600">{ROLE_LABELS[r.role]}</td>
+                <td className="text-slate-500">
+                  {new Date(r.registration_date).toLocaleDateString()}
+                </td>
                 <td>
                   <span
                     className={`text-xs font-medium px-2 py-1 rounded-full ${
@@ -181,7 +185,7 @@ export default function AttendancePage() {
             ))}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={5} className="py-8 text-center text-slate-400">
+                <td colSpan={6} className="py-8 text-center text-slate-400">
                   No matching participants.
                 </td>
               </tr>

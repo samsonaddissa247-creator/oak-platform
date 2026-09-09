@@ -56,6 +56,14 @@ export default function CheckInPage() {
 
     const scanner = new Html5Qrcode("qr-reader");
     scannerRef.current = scanner;
+    let disposed = false;
+    let started = false;
+
+    const stopScanner = () => {
+      if (!started) return;
+      started = false;
+      scanner.stop().catch(() => {});
+    };
 
     scanner
       .start(
@@ -67,12 +75,20 @@ export default function CheckInPage() {
         },
         () => {}
       )
+      .then(() => {
+        started = true;
+        if (disposed) stopScanner();
+      })
       .catch(() => {
-        setState({ status: "error", reason: "Camera unavailable — use manual entry below." });
+        if (!disposed) {
+          setState({ status: "error", reason: "Camera unavailable — use manual entry below." });
+        }
       });
 
     return () => {
-      scanner.stop().catch(() => {});
+      disposed = true;
+      stopScanner();
+      if (scannerRef.current === scanner) scannerRef.current = null;
     };
   }, [state.status, handleScan]);
 
@@ -143,6 +159,9 @@ function SuccessCard({
           {participant.first_name} {participant.last_name}
         </p>
         <p className="text-slate-500 text-sm">{participant.organisation}</p>
+        <p className="text-slate-500 text-sm">
+          Registration: {participant.registration_status === "registered" ? "Registered" : "Cancelled"}
+        </p>
         <span className="inline-block mt-2 text-xs font-medium bg-slate-100 rounded-full px-3 py-1">
           {participant.role.replace("_", " ")}
         </span>

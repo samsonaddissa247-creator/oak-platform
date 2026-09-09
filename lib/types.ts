@@ -25,7 +25,7 @@ export const ACCESS_MATRIX: Record<string, UserRole[]> = {
   registration: ["partner", "oak_staff", "presenter", "observer", "coordination_team"],
   qr_code_page: ["partner"],
   program_page: ["oak_staff", "presenter", "observer", "coordination_team"],
-  partners_page: ["oak_staff", "presenter", "observer", "coordination_team"],
+  partners_page: ["partner", "oak_staff", "presenter", "observer", "coordination_team"],
   check_in_page: ["coordination_team"],
   attendance_page: ["coordination_team"],
 };
