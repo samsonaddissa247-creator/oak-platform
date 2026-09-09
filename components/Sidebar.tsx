@@ -17,10 +17,11 @@ export default function Sidebar() {
   return (
     <aside className="border-b border-[#244578] bg-[#162e55] px-3 py-4 lg:sticky lg:top-0 lg:min-h-screen lg:w-64 lg:shrink-0 lg:border-b-0 lg:border-r lg:border-slate-200 lg:bg-white lg:px-4 lg:py-6">
       <div className="mb-4 px-2 lg:mb-8">
-        <div className="text-xl font-extrabold tracking-tight text-white lg:text-slate-900">OAK</div>
-        <div className="mt-1 text-xs uppercase tracking-wide text-blue-100 lg:text-slate-500">
-          Partner Convening 2026
-        </div>
+        <img
+          src="/oak-removebg-preview.png"
+          alt="OAK Foundation Partner Convening 2026"
+          className="h-auto w-full max-w-[210px]"
+        />
       </div>
 
       <nav className="flex flex-wrap gap-2 lg:block lg:space-y-1">
