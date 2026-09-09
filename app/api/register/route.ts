@@ -81,6 +81,7 @@ export async function POST(req: Request) {
       .single();
 
     if (error) {
+      console.error("Supabase registration error:", error);
       if (error.code === "23505") {
         return NextResponse.json({ error: "This email is already registered." }, { status: 409 });
       }
