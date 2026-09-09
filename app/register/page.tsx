@@ -229,7 +229,7 @@ export default function RegisterPage() {
           disabled={submitting}
           className="w-full rounded-xl bg-[#162e55] py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0f1f3d] disabled:opacity-60"
         >
-          {submitting ? "Registering…" : "Register & Generate QR Code"}
+          {submitting ? "Registering…" : "Register"}
         </button>
       </form>
       <p className="mt-3 text-center text-[11px] text-slate-400">
