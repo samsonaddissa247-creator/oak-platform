@@ -39,9 +39,9 @@ dashboard, programme, and partner directory.
 
 4. Open http://localhost:3000/register to test the registration flow.
 
-## Still to do before this is production-ready
+## Current limitations
 
-These were **out of scope for this scaffold** and need follow-up:
+The following production features are not included in the current implementation:
 
 - **Coordination Team login** — the brief calls for "admin authentication."
   Right now every role (including Coordination Team) is just tracked via
@@ -49,12 +49,10 @@ These were **out of scope for this scaffold** and need follow-up:
   Supabase Auth (email/password or magic link) for the Coordination Team
   role specifically, and gate `/check-in` and `/attendance` server-side
   (middleware or a server component check), not just by hiding the nav link.
-- **Confirmation emails** — the `/api/register` route has a `TODO` where a
-  transactional email (Resend, SendGrid, etc.) should send Partners their
-  registration details + QR code + event info.
-- **Programme content** — session data in `/program` is hardcoded as a
-  placeholder. Move it into a `sessions` table and query it, same pattern
-  as `partner_orgs`.
+- **Confirmation emails** — add a transactional email provider such as
+  Resend or SendGrid to send registration details, QR code, and event info.
+- **Programme content** — move the hardcoded session data in `/program` into
+  a `sessions` table and query it, using the same pattern as `partner_orgs`.
 - **Personal notes persistence** — currently only stored in React state
   (lost on refresh). Wire up the `personal_notes` table from the schema.
 - **Partner directory seed data** — `partner_orgs` table is empty by
