@@ -41,10 +41,15 @@ export default function QrCodePage() {
 
       <div className="bg-white rounded-2xl p-6 shadow-sm text-center">
         <p className="text-xs uppercase tracking-wide text-slate-500 mb-4">Your Entry Pass</p>
-        <div className="inline-block bg-slate-50 rounded-xl p-6">
-          <QRCodeCanvas id="participant-qr" value={participant.qr_code_id ?? ""} size={220} />
+        <div className="inline-block max-w-full bg-slate-50 rounded-xl p-4 sm:p-6">
+          <QRCodeCanvas
+            id="participant-qr"
+            value={participant.qr_code_id ?? ""}
+            size={220}
+            className="h-auto max-w-full"
+          />
         </div>
-        <p className="mt-4 font-mono text-sm text-slate-700">{participant.qr_code_id}</p>
+        <p className="mt-4 break-all font-mono text-sm text-slate-700">{participant.qr_code_id}</p>
         <p className="text-sm text-slate-500">Present at event entrance for check-in</p>
       </div>
 
@@ -77,9 +82,9 @@ export default function QrCodePage() {
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex justify-between py-2.5">
+    <div className="flex flex-col gap-1 py-2.5 sm:flex-row sm:justify-between sm:gap-4">
       <span className="text-slate-500">{label}</span>
-      <span className="font-medium text-slate-900">{value}</span>
+      <span className="break-words font-medium text-slate-900 sm:text-right">{value}</span>
     </div>
   );
 }

@@ -32,7 +32,7 @@ export default function Sidebar({ role }: { role: UserRole | null }) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
+              className={`flex min-w-[calc(50%-0.25rem)] flex-1 items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium transition sm:min-w-0 sm:flex-none lg:w-full ${
                 active
                   ? "bg-[#0f1f3d] text-white"
                   : "text-slate-600 hover:bg-slate-100"

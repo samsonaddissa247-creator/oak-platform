@@ -53,11 +53,11 @@ export default function PartnersPage() {
             href={`/partners/${p.id}`}
             className="block bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition"
           >
-            <div className="flex justify-between items-start">
-              <div>
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
                 <p className="font-bold text-slate-900">{p.name}</p>
                 <p className="text-sm text-slate-500">{p.region}</p>
-                <div className="flex gap-2 mt-2">
+                <div className="mt-2 flex flex-wrap gap-2">
                   {p.tags?.map((t) => (
                     <span key={t} className="text-xs bg-slate-100 rounded-full px-2 py-1">
                       {t}
@@ -67,9 +67,9 @@ export default function PartnersPage() {
               </div>
               <span className="text-slate-300">›</span>
             </div>
-            <div className="flex justify-between mt-3 text-xs text-slate-400">
+            <div className="mt-3 flex flex-col gap-1 text-xs text-slate-400 sm:flex-row sm:justify-between">
               <span>Partner since {p.partner_since}</span>
-              {p.website_url && <span>{p.website_url}</span>}
+              {p.website_url && <span className="break-all sm:text-right">{p.website_url}</span>}
             </div>
           </Link>
         ))}
