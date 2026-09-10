@@ -2,36 +2,26 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
 import { ArrowLeft, ExternalLink, Globe2, Mail } from "lucide-react";
-import { supabaseBrowser } from "@/lib/supabase";
-
-interface PartnerOrg {
-  id: string;
-  name: string;
-  region: string | null;
-  tags: string[] | null;
-  about: string | null;
-  website_url: string | null;
-  contact_name: string | null;
-  contact_email: string | null;
-  partner_since: number | null;
-}
+import type { PartnerOrg } from "@/lib/supabase";
 
 export default function PartnerDetailPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const [partner, setPartner] = useState<PartnerOrg | null>(null);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    supabaseBrowser
-      .from("partner_orgs")
-      .select("*")
-      .eq("id", id)
-      .single()
-      .then(({ data }) => setPartner(data));
+    fetch(`/api/partners/${id}`, { cache: "no-store" })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => setPartner(data))
+      .catch(() => setPartner(null))
+      .finally(() => setLoaded(true));
   }, [id]);
 
-  if (!partner) return <div className="flex-1 p-8 text-slate-400">Loading…</div>;
+  if (!loaded) return <div className="mx-auto max-w-2xl p-8 text-center text-sm text-slate-400">Loading partner profile…</div>;
+  if (!partner) return <div className="mx-auto max-w-2xl rounded-2xl bg-white p-8 text-center text-sm text-slate-500 shadow-sm">Partner profile not found.</div>;
 
   return (
     <div className="mx-auto w-full max-w-2xl space-y-4 px-3 py-5 sm:px-6 sm:py-8">
@@ -42,7 +32,7 @@ export default function PartnerDetailPage() {
       <div className="relative overflow-hidden rounded-2xl bg-[#162e55] p-5 text-white shadow-sm sm:p-6">
         <div className="absolute -right-8 -top-6 h-32 w-32 rounded-full bg-white/10" />
         <div className="relative flex items-center gap-3">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/15 text-sm font-bold">{initials(partner.name)}</div>
+          {partner.logo_url ? <Image src={partner.logo_url} alt="" width={48} height={48} unoptimized className="h-12 w-12 shrink-0 rounded-xl object-cover" /> : <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/15 text-sm font-bold">{initials(partner.name)}</div>}
           <div><p className="text-[10px] uppercase tracking-[0.14em] text-blue-200">Foundation · Partner since {partner.partner_since}</p><h1 className="mt-1 text-xl font-extrabold sm:text-2xl">{partner.name}</h1></div>
         </div>
         <div className="relative mt-4 flex flex-wrap gap-2">

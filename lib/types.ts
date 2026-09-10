@@ -18,7 +18,7 @@ export const ROLE_LANDING: Record<UserRole, string> = {
   oak_staff: "/program",
   presenter: "/program",
   observer: "/program",
-  coordination_team: "/dashboard/coordination",
+  coordination_team: "/check-in",
 };
 
 export const ACCESS_MATRIX: Record<string, UserRole[]> = {

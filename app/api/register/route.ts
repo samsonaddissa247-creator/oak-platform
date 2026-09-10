@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { hasSupabaseConfig, mockParticipants, supabaseAdmin } from "@/lib/supabase";
+import { hasSupabaseConfig, mockPartnerOrgs, mockParticipants, supabaseAdmin } from "@/lib/supabase";
 import { Participant, RegistrationInput, ROLE_LANDING } from "@/lib/types";
 
 function makeRegistrationId() {
@@ -51,6 +51,22 @@ export async function POST(req: Request) {
     };
     mockParticipants.set(participant.id, participant);
 
+    if (isPartner) {
+      const partnerId = crypto.randomUUID();
+      mockPartnerOrgs.set(partnerId, {
+        id: partnerId,
+        name: body.organisation,
+        region: "Global",
+        logo_url: null,
+        tags: body.sub_partner ? [body.sub_partner] : ["OAK Partner"],
+        about: `${body.organisation} is registered as an OAK Foundation event partner.`,
+        website_url: null,
+        contact_name: `${body.first_name} ${body.last_name}`,
+        contact_email: body.email,
+        partner_since: new Date().getFullYear(),
+      });
+    }
+
     return NextResponse.json({
       participant,
       redirectTo: ROLE_LANDING[body.role],
@@ -86,6 +102,20 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "This email is already registered." }, { status: 409 });
       }
       return NextResponse.json({ error: "Unable to complete registration." }, { status: 503 });
+    }
+
+    if (isPartner) {
+      const { error: partnerError } = await db.from("partner_orgs").insert({
+        name: body.organisation,
+        region: "Global",
+        tags: body.sub_partner ? [body.sub_partner] : ["OAK Partner"],
+        about: `${body.organisation} is registered as an OAK Foundation event partner.`,
+        contact_name: `${body.first_name} ${body.last_name}`,
+        contact_email: body.email,
+        partner_since: new Date().getFullYear(),
+      });
+
+      if (partnerError) console.error("Partner directory insert error:", partnerError);
     }
 
     return NextResponse.json({

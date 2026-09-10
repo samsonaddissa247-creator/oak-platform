@@ -2,29 +2,22 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Globe2, Search } from "lucide-react";
-import { supabaseBrowser } from "@/lib/supabase";
-
-interface PartnerOrg {
-  id: string;
-  name: string;
-  region: string | null;
-  tags: string[] | null;
-  website_url: string | null;
-  partner_since: number | null;
-}
+import type { PartnerOrg } from "@/lib/supabase";
 
 export default function PartnersPage() {
   const [partners, setPartners] = useState<PartnerOrg[]>([]);
   const [search, setSearch] = useState("");
   const [region, setRegion] = useState("All Regions");
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    supabaseBrowser
-      .from("partner_orgs")
-      .select("id, name, region, tags, website_url, partner_since")
-      .order("name")
-      .then(({ data }) => setPartners(data || []));
+    fetch("/api/partners", { cache: "no-store" })
+      .then((response) => response.json())
+      .then((data) => setPartners(Array.isArray(data) ? data : []))
+      .catch(() => setPartners([]))
+      .finally(() => setLoaded(true));
   }, []);
 
   const regions = ["All Regions", "Global", "Sub-Saharan Africa", "Northern Europe", "Middle East & North Africa"];
@@ -44,9 +37,11 @@ export default function PartnersPage() {
 
       <div className="rounded-2xl bg-white p-3 shadow-sm"><label className="relative block"><Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" /><input className="input pl-9" placeholder="Search organisations, focus areas…" value={search} onChange={(e) => setSearch(e.target.value)} /></label><div className="mt-3 flex gap-2 overflow-x-auto pb-1">{regions.map((item) => <button key={item} onClick={() => setRegion(item)} className={`whitespace-nowrap rounded-full px-3 py-1.5 text-[10px] font-semibold ${region === item ? "bg-[#162e55] text-white" : "bg-slate-100 text-slate-500"}`}>{item}</button>)}</div></div>
 
-      <section><div className="mb-2 flex items-center justify-between"><p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">Featured partners</p><Globe2 className="h-4 w-4 text-slate-300" /></div><div className="grid grid-cols-3 gap-2">{partners.slice(0, 3).map((p) => <Link key={p.id} href={`/partners/${p.id}`} className="rounded-2xl bg-white p-3 text-center shadow-sm"><div className="mx-auto flex h-9 w-9 items-center justify-center rounded-xl bg-[#162e55] text-xs font-bold text-white">{initials(p.name)}</div><p className="mt-2 truncate text-xs font-bold text-slate-700">{p.name}</p><p className="truncate text-[10px] text-slate-400">{p.region}</p></Link>)}</div></section>
+      {!loaded && <div className="rounded-2xl bg-white p-8 text-center text-sm text-slate-400 shadow-sm">Loading partner directory…</div>}
 
-      <section><p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">All partners</p><div className="space-y-2">
+      {loaded && <section><div className="mb-2 flex items-center justify-between"><p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">Featured partners</p><Globe2 className="h-4 w-4 text-slate-300" /></div><div className="grid grid-cols-3 gap-2">{partners.slice(0, 3).map((p) => <Link key={p.id} href={`/partners/${p.id}`} className="rounded-2xl bg-white p-3 text-center shadow-sm"><PartnerMark partner={p} /><p className="mt-2 truncate text-xs font-bold text-slate-700">{p.name}</p><p className="truncate text-[10px] text-slate-400">{p.region}</p></Link>)}</div></section>}
+
+      {loaded && <section><p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">All partners</p><div className="space-y-2">
         {filtered.map((p) => (
           <Link
             key={p.id}
@@ -55,7 +50,7 @@ export default function PartnersPage() {
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex min-w-0 gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#162e55] text-[10px] font-bold text-white">{initials(p.name)}</div>
+                <PartnerMark partner={p} />
                 <div className="min-w-0"><p className="font-bold text-slate-900">{p.name}</p>
                 <p className="text-sm text-slate-500">{p.region}</p>
                 <div className="mt-2 flex flex-wrap gap-2">
@@ -78,8 +73,16 @@ export default function PartnersPage() {
         {filtered.length === 0 && (
           <p className="text-center text-slate-400 py-8">No partners match your search.</p>
         )}
-      </div></section>
+      </div></section>}
     </div>
+  );
+}
+
+function PartnerMark({ partner }: { partner: PartnerOrg }) {
+  return partner.logo_url ? (
+    <Image src={partner.logo_url} alt="" width={36} height={36} unoptimized className="h-9 w-9 shrink-0 rounded-xl object-cover" />
+  ) : (
+    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#162e55] text-[10px] font-bold text-white">{initials(partner.name)}</div>
   );
 }
 
