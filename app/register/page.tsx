@@ -74,37 +74,37 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-3 py-5 sm:px-6 sm:py-8">
-      <div className="mb-3 rounded-2xl bg-[#162e55] p-5 text-white shadow-sm sm:p-6">
+    <div className="mx-auto w-full max-w-3xl px-2.5 py-3 sm:px-6 sm:py-8">
+      <div className="mb-2.5 rounded-xl bg-[#162e55] p-3.5 text-white shadow-sm sm:mb-3 sm:rounded-2xl sm:p-6">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-200">
           OAK Foundation
         </p>
-        <div className="mt-2 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+        <div className="mt-1.5 flex flex-col justify-between gap-2 sm:mt-2 sm:flex-row sm:items-end sm:gap-3">
           <div>
-            <h1 className="text-2xl font-extrabold leading-tight sm:text-3xl">Partner Convening 2026</h1>
-            <p className="mt-1 text-sm text-blue-100">Harare · 9–11 November 2026</p>
+            <h1 className="text-[21px] font-extrabold leading-tight sm:text-3xl">Partner Convening 2026</h1>
+            <p className="mt-1 text-xs text-blue-100 sm:text-sm">Harare · 9–11 November 2026</p>
           </div>
-          <span className="w-fit rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100">
+          <span className="w-fit rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-medium text-blue-100 sm:px-3 sm:text-xs">
             Registration open
           </span>
         </div>
       </div>
 
-      <div className="mb-5 grid grid-cols-3 gap-2 sm:gap-3">
+      <div className="mb-3 grid grid-cols-3 gap-1.5 sm:mb-5 sm:gap-3">
         <EventStat icon={UsersRound} value="110+" label="Attendees" />
         <EventStat icon={CalendarDays} value="24" label="Sessions" />
         <EventStat icon={Layers3} value="38" label="Partners" />
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5 rounded-2xl bg-white p-4 shadow-sm sm:p-6">
-        <div className="border-b border-slate-100 pb-3">
+      <form onSubmit={handleSubmit} className="space-y-3.5 rounded-xl bg-white p-3 shadow-sm sm:space-y-5 sm:rounded-2xl sm:p-6">
+        <div className="border-b border-slate-100 pb-2.5 sm:pb-3">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
             Event access
           </p>
-          <h2 className="mt-1 text-lg font-bold text-slate-900">Registration Form</h2>
+          <h2 className="mt-1 text-base font-bold text-slate-900 sm:text-lg">Registration Form</h2>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
           <Field label="First Name" required>
             <input
               required
@@ -157,7 +157,7 @@ export default function RegisterPage() {
           </select>
         </Field>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
           <Field label="Email Address" required>
             <input
               required
@@ -176,7 +176,7 @@ export default function RegisterPage() {
           </Field>
         </div>
 
-        <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <div className="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-3 sm:space-y-4 sm:rounded-xl sm:p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
             Requirements
           </p>
@@ -221,7 +221,7 @@ export default function RegisterPage() {
         <label className="flex items-start gap-3 rounded-xl border border-slate-200 px-3 py-3 text-sm text-slate-600">
           <input
             type="checkbox"
-            className="mt-1"
+            className="mt-0.5"
             checked={form.consent}
             onChange={(e) => update("consent", e.target.checked)}
           />
@@ -236,7 +236,7 @@ export default function RegisterPage() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full rounded-xl bg-[#162e55] py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0f1f3d] disabled:opacity-60"
+          className="w-full rounded-lg bg-[#162e55] py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0f1f3d] disabled:opacity-60 sm:rounded-xl sm:py-3.5"
         >
           {submitting ? "Registering…" : "Register"}
         </button>
@@ -258,10 +258,10 @@ function EventStat({
   label: string;
 }) {
   return (
-    <div className="rounded-xl bg-white p-3 shadow-sm sm:p-4">
+    <div className="rounded-lg bg-white p-2.5 shadow-sm sm:rounded-xl sm:p-4">
       <Icon aria-hidden="true" className="h-4 w-4 text-[#7894bc]" strokeWidth={1.8} />
-      <p className="mt-2 text-lg font-extrabold leading-none text-[#162e55] sm:text-xl">{value}</p>
-      <p className="mt-1 text-[10px] uppercase tracking-wide text-slate-400">{label}</p>
+      <p className="mt-1.5 text-base font-extrabold leading-none text-[#162e55] sm:mt-2 sm:text-xl">{value}</p>
+      <p className="mt-1 text-[9px] uppercase tracking-wide text-slate-400 sm:text-[10px]">{label}</p>
     </div>
   );
 }
@@ -277,7 +277,7 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1">
+      <span className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-slate-500 sm:text-xs">
         {label} {required && <span className="text-red-500">*</span>}
       </span>
       {children}
