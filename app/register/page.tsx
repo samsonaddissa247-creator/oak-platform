@@ -84,7 +84,7 @@ export default function RegisterPage() {
             <h1 className="text-[21px] font-extrabold leading-tight sm:text-3xl">Partner Convening 2026</h1>
             <p className="mt-1 text-xs text-blue-100 sm:text-sm">Harare · 9–11 November 2026</p>
           </div>
-          <span className="w-fit rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-medium text-blue-100 sm:px-3 sm:text-xs">
+          <span className="hidden w-fit rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-medium text-blue-100 sm:inline-block sm:px-3 sm:text-xs">
             Registration open
           </span>
         </div>
@@ -96,7 +96,7 @@ export default function RegisterPage() {
         <EventStat icon={Layers3} value="38" label="Partners" />
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-3.5 rounded-xl bg-white p-3 shadow-sm sm:space-y-5 sm:rounded-2xl sm:p-6">
+      <form onSubmit={handleSubmit} className="register-form space-y-3 rounded-xl bg-white p-2.5 shadow-sm sm:space-y-5 sm:rounded-2xl sm:p-6">
         <div className="border-b border-slate-100 pb-2.5 sm:pb-3">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
             Event access
@@ -104,11 +104,11 @@ export default function RegisterPage() {
           <h2 className="mt-1 text-base font-bold text-slate-900 sm:text-lg">Registration Form</h2>
         </div>
 
-        <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-2 gap-2 sm:gap-4">
           <Field label="First Name" required>
             <input
               required
-              className="input"
+              className="input text-xs sm:text-sm"
               value={form.first_name}
               onChange={(e) => update("first_name", e.target.value)}
             />
@@ -116,7 +116,7 @@ export default function RegisterPage() {
           <Field label="Last Name" required>
             <input
               required
-              className="input"
+              className="input text-xs sm:text-sm"
               value={form.last_name}
               onChange={(e) => update("last_name", e.target.value)}
             />
@@ -126,7 +126,7 @@ export default function RegisterPage() {
         <Field label="Organisation" required>
           <input
             required
-            className="input"
+            className="input text-xs sm:text-sm"
             value={form.organisation}
             onChange={(e) => update("organisation", e.target.value)}
           />
@@ -134,7 +134,7 @@ export default function RegisterPage() {
 
         <Field label="Sub-Partner / Programme Area">
           <input
-            className="input"
+            className="input text-xs sm:text-sm"
             placeholder="Optional"
             value={form.sub_partner}
             onChange={(e) => update("sub_partner", e.target.value)}
@@ -144,7 +144,7 @@ export default function RegisterPage() {
         <Field label="Role / Capacity" required>
           <select
             required
-            className="input"
+            className="input text-xs sm:text-sm"
             value={form.role}
             onChange={(e) => update("role", e.target.value as UserRole)}
           >
@@ -157,32 +157,32 @@ export default function RegisterPage() {
           </select>
         </Field>
 
-        <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-2 gap-2 sm:gap-4">
           <Field label="Email Address" required>
             <input
               required
               type="email"
-              className="input"
+              className="input text-xs sm:text-sm"
               value={form.email}
               onChange={(e) => update("email", e.target.value)}
             />
           </Field>
           <Field label="Phone Number">
             <input
-              className="input"
+              className="input text-xs sm:text-sm"
               value={form.phone}
               onChange={(e) => update("phone", e.target.value)}
             />
           </Field>
         </div>
 
-        <div className="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-3 sm:space-y-4 sm:rounded-xl sm:p-4">
+        <div className="space-y-2.5 rounded-lg border border-slate-200 bg-slate-50 p-2.5 sm:space-y-4 sm:rounded-xl sm:p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
             Requirements
           </p>
           <Field label="Dietary Requirements">
             <textarea
-              className="input"
+              className="input text-xs sm:text-sm"
               rows={2}
               placeholder="e.g. Vegetarian, Halal, Gluten-free"
               value={form.dietary_requirements}
@@ -191,7 +191,7 @@ export default function RegisterPage() {
           </Field>
           <Field label="Accessibility Requirements">
             <textarea
-              className="input"
+              className="input text-xs sm:text-sm"
               rows={2}
               placeholder="e.g. Wheelchair access, hearing loop"
               value={form.accessibility_requirements}
@@ -200,7 +200,7 @@ export default function RegisterPage() {
           </Field>
           <Field label="Travel & Accommodation">
             <textarea
-              className="input"
+              className="input text-xs sm:text-sm"
               rows={2}
               placeholder="e.g. Flight from London, hotel needed"
               value={form.travel_requirements}
@@ -209,7 +209,7 @@ export default function RegisterPage() {
           </Field>
           <Field label="Accommodation Requirements">
             <textarea
-              className="input"
+              className="input text-xs sm:text-sm"
               rows={2}
               placeholder="e.g. Single room, 2 nights"
               value={form.accommodation_requirements}
@@ -218,7 +218,7 @@ export default function RegisterPage() {
           </Field>
         </div>
 
-        <label className="flex items-start gap-3 rounded-xl border border-slate-200 px-3 py-3 text-sm text-slate-600">
+        <label className="flex items-start gap-2 rounded-lg border border-slate-200 px-2.5 py-2 text-[10px] leading-tight text-slate-600 sm:gap-3 sm:rounded-xl sm:px-3 sm:py-3 sm:text-sm">
           <input
             type="checkbox"
             className="mt-0.5"
