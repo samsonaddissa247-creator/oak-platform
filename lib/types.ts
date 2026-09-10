@@ -15,9 +15,9 @@ export const ROLE_LABELS: Record<UserRole, string> = {
 
 export const ROLE_LANDING: Record<UserRole, string> = {
   partner: "/qr-code",
-  oak_staff: "/dashboard",
-  presenter: "/dashboard",
-  observer: "/dashboard",
+  oak_staff: "/program",
+  presenter: "/program",
+  observer: "/program",
   coordination_team: "/dashboard/coordination",
 };
 
