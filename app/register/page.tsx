@@ -82,7 +82,7 @@ export default function RegisterPage() {
         <div className="mt-1.5 flex flex-col justify-between gap-2 sm:mt-2 sm:flex-row sm:items-end sm:gap-3">
           <div>
             <h1 className="text-[21px] font-extrabold leading-tight sm:text-3xl">Partner Convening 2026</h1>
-            <p className="mt-1 text-xs text-blue-100 sm:text-sm">Harare · 9–11 November 2026</p>
+            <p className="mt-1 text-xs text-blue-100 sm:text-sm">Geneva · 9–11 November 2026</p>
           </div>
           <span className="hidden w-fit rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-medium text-blue-100 sm:inline-block sm:px-3 sm:text-xs">
             Registration open
