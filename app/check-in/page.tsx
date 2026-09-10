@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Html5Qrcode } from "html5-qrcode";
+import { AlertTriangle, CircleX, Phone, RefreshCw } from "lucide-react";
 import { Participant } from "@/lib/types";
 
 type ScanState =
@@ -178,24 +179,58 @@ function SuccessCard({
 
 function ErrorCard({ reason, onRetry }: { reason: string; onRetry: () => void }) {
   return (
-    <div className="space-y-4">
-      <div className="rounded-2xl bg-gradient-to-r from-red-500 to-red-600 text-white p-6">
-        <p className="text-xs uppercase tracking-wide text-red-100">Check-In Failed</p>
-        <p className="font-bold text-lg">QR Code Not Recognized</p>
-        <p className="text-red-100 text-sm">{reason}</p>
+    <div className="space-y-3">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#ef292f] to-[#f84a50] p-5 text-white shadow-sm sm:p-6">
+        <div className="absolute -right-8 -top-10 h-32 w-32 rounded-full bg-white/10" />
+        <div className="relative flex items-center gap-3">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/15">
+            <CircleX aria-hidden="true" className="h-6 w-6" strokeWidth={2} />
+          </div>
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-red-100">
+              Check-In Failed
+            </p>
+            <p className="mt-1 text-lg font-extrabold leading-tight">QR Code Not Recognized</p>
+            <p className="mt-1 text-sm text-red-100">{reason === "Network Error — please try again" ? reason : "Code is invalid or unregistered"}</p>
+          </div>
+        </div>
       </div>
+
+      <div className="rounded-2xl bg-white p-5 shadow-sm sm:p-6">
+        <div className="flex items-center gap-2 text-sm font-bold text-slate-800">
+          <AlertTriangle aria-hidden="true" className="h-4 w-4 text-[#ef6268]" />
+          Possible reasons
+        </div>
+        <ul className="mt-3 space-y-2 text-sm text-slate-500">
+          {[
+            "QR code belongs to a different event",
+            "Registration was not completed",
+            "Code has been altered or corrupted",
+            "Attendee registered under a different email",
+          ].map((item) => (
+            <li key={item} className="flex items-center gap-2">
+              <span className="h-2 w-2 shrink-0 rounded-full bg-[#ffb8bc]" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+
       <button
         onClick={onRetry}
-        className="w-full rounded-xl bg-[#0f1f3d] text-white font-semibold py-3"
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#162e55] py-3.5 font-semibold text-white shadow-sm transition hover:bg-[#0f1f3d]"
       >
-        Retry Scan
+        <RefreshCw aria-hidden="true" className="h-4 w-4" />
+        Try Again
       </button>
-      <button
-        onClick={onRetry}
-        className="w-full rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold py-3"
+
+      <a
+        href="mailto:coordination@oakfoundation.org"
+        className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white py-3.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50"
       >
-        Return to Scanner
-      </button>
+        <Phone aria-hidden="true" className="h-4 w-4" />
+        Contact Coordination Team
+      </a>
     </div>
   );
 }
