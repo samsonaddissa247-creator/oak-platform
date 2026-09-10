@@ -19,7 +19,23 @@ export default function Sidebar({ role }: { role: UserRole | null }) {
 
   return (
     <aside className="border-b border-slate-200 bg-white px-3 py-4 md:sticky md:top-0 md:min-h-screen md:w-52 md:shrink-0 md:border-b-0 md:border-r md:px-4 md:py-6">
-      <div className="mb-4 px-2 md:mb-8">
+      <div className="-mx-3 mb-4 flex h-[82px] items-center gap-3 bg-[#162e55] px-8 md:hidden">
+        <div className="relative h-8 w-[58px] shrink-0 overflow-hidden">
+          <Image
+            src="/oak-removebg-preview.png"
+            alt="OAK Foundation"
+            width={180}
+            height={90}
+            className="absolute left-[-18px] top-[-20px] max-w-none brightness-0 invert"
+          />
+        </div>
+        <span className="h-7 w-px bg-[#91a4c4]/40" aria-hidden="true" />
+        <span className="whitespace-nowrap text-[11px] font-semibold uppercase tracking-[0.16em] text-[#b9c4d8]">
+          Partner Convening 2026
+        </span>
+      </div>
+
+      <div className="mb-4 hidden px-2 md:mb-8 md:block">
         <Image
           src="/oak-removebg-preview.png"
           alt="OAK Foundation Partner Convening 2026"

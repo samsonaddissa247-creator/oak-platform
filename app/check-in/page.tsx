@@ -10,6 +10,11 @@ type ScanState =
   | { status: "success"; participant: Participant }
   | { status: "error"; reason: string };
 
+const ERROR_TITLES: Record<string, string> = {
+  "Network Error — please try again": "Supabase Connection Failed",
+  "Camera unavailable — use manual entry below.": "Camera Unavailable",
+};
+
 const REASON_COPY: Record<string, string> = {
   not_found: "Participant Not Found",
   duplicate: "Duplicate QR Code — already checked in today",
@@ -66,25 +71,36 @@ export default function CheckInPage() {
       scanner.stop().catch(() => {});
     };
 
-    scanner
-      .start(
-        { facingMode: "environment" },
-        { fps: 10, qrbox: 250 },
-        (decodedText) => {
-          scanner.pause(true);
-          handleScan(decodedText);
-        },
-        () => {}
-      )
-      .then(() => {
+    async function startScanner() {
+      try {
+        const cameras = await Html5Qrcode.getCameras();
+        if (disposed || cameras.length === 0) {
+          throw new Error("No camera found");
+        }
+
+        const rearCamera = cameras.find((camera) => /back|rear|environment/i.test(camera.label));
+        const cameraId = (rearCamera || cameras[0]).id;
+
+        await scanner.start(
+          cameraId,
+          { fps: 10, qrbox: 250 },
+          (decodedText) => {
+            scanner.pause(true);
+            handleScan(decodedText);
+          },
+          () => {}
+        );
+
         started = true;
         if (disposed) stopScanner();
-      })
-      .catch(() => {
+      } catch {
         if (!disposed) {
           setState({ status: "error", reason: "Camera unavailable — use manual entry below." });
         }
-      });
+      }
+    }
+
+    startScanner();
 
     return () => {
       disposed = true;
@@ -135,7 +151,15 @@ export default function CheckInPage() {
         <SuccessCard participant={state.participant} onNext={reset} />
       )}
 
-      {state.status === "error" && <ErrorCard reason={state.reason} onRetry={reset} />}
+      {state.status === "error" && (
+        <ErrorCard
+          reason={state.reason}
+          manualCode={manualCode}
+          onManualCodeChange={setManualCode}
+          onManualSubmit={() => manualCode && handleScan(manualCode)}
+          onRetry={reset}
+        />
+      )}
     </div>
   );
 }
@@ -221,7 +245,21 @@ function InfoTile({ icon: Icon, label, value }: { icon: typeof Activity; label: 
   );
 }
 
-function ErrorCard({ reason, onRetry }: { reason: string; onRetry: () => void }) {
+function ErrorCard({
+  reason,
+  manualCode,
+  onManualCodeChange,
+  onManualSubmit,
+  onRetry,
+}: {
+  reason: string;
+  manualCode: string;
+  onManualCodeChange: (value: string) => void;
+  onManualSubmit: () => void;
+  onRetry: () => void;
+}) {
+  const title = ERROR_TITLES[reason] || "QR Code Not Recognized";
+
   return (
     <div className="space-y-3">
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#ef292f] to-[#f84a50] p-5 text-white shadow-sm sm:p-6">
@@ -234,9 +272,27 @@ function ErrorCard({ reason, onRetry }: { reason: string; onRetry: () => void })
             <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-red-100">
               Check-In Failed
             </p>
-            <p className="mt-1 text-lg font-extrabold leading-tight">QR Code Not Recognized</p>
-            <p className="mt-1 text-sm text-red-100">{reason === "Network Error — please try again" ? reason : "Code is invalid or unregistered"}</p>
+            <p className="mt-1 text-lg font-extrabold leading-tight">{title}</p>
+            <p className="mt-1 text-sm text-red-100">{reason}</p>
           </div>
+        </div>
+      </div>
+
+      <div className="rounded-2xl bg-white p-5 shadow-sm sm:p-6">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Manual Code Entry</p>
+        <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+          <input
+            className="input flex-1"
+            placeholder="OAK-2026-XXXX-XXXX"
+            value={manualCode}
+            onChange={(event) => onManualCodeChange(event.target.value)}
+          />
+          <button
+            onClick={onManualSubmit}
+            className="rounded-xl bg-[#0f1f3d] px-6 py-2.5 font-semibold text-white"
+          >
+            Check
+          </button>
         </div>
       </div>
 

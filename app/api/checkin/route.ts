@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { hasSupabaseConfig, mockParticipants, supabaseAdmin } from "@/lib/supabase";
 
 export async function POST(req: Request) {
-  const { qrCodeId } = await req.json();
+  const body = await req.json();
+  const qrCodeId = typeof body.qrCodeId === "string" ? body.qrCodeId.trim() : "";
 
   if (!qrCodeId) {
     return NextResponse.json({ ok: false, reason: "invalid" }, { status: 400 });
@@ -40,10 +41,15 @@ export async function POST(req: Request) {
     const { data: participant, error } = await db
       .from("participants")
       .select("*")
-      .eq("qr_code_id", qrCodeId)
+      .or(`qr_code_id.eq.${qrCodeId},registration_id.eq.${qrCodeId}`)
       .single();
 
-    if (error || !participant) {
+    if (error && error.code !== "PGRST116") {
+      console.error("Supabase check-in lookup error:", error);
+      return NextResponse.json({ ok: false, reason: "network_error" }, { status: 503 });
+    }
+
+    if (!participant) {
       return NextResponse.json({ ok: false, reason: "not_found" }, { status: 404 });
     }
 

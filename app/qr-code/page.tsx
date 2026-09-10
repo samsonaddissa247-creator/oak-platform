@@ -24,6 +24,14 @@ export default function QrCodePage() {
     );
   }
 
+  if (!participant.qr_code_id) {
+    return (
+      <div className="flex-1 flex items-center justify-center px-6 text-center text-slate-500">
+        QR codes are issued to Partner registrations only.
+      </div>
+    );
+  }
+
   function downloadQr() {
     const canvas = document.getElementById("participant-qr") as HTMLCanvasElement | null;
     if (!canvas) return;
@@ -66,7 +74,7 @@ export default function QrCodePage() {
         <div className="mx-auto mt-4 inline-block max-w-full rounded-xl border border-slate-100 bg-slate-50 p-4 sm:p-6">
           <QRCodeCanvas
             id="participant-qr"
-            value={participant.qr_code_id ?? ""}
+            value={participant.qr_code_id}
             size={220}
             className="h-auto max-w-full"
           />
