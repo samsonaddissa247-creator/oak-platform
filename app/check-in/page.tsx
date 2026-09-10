@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Html5Qrcode } from "html5-qrcode";
-import { Activity, AlertTriangle, CheckCircle2, CircleX, MapPin, Phone, RefreshCw, ScanLine } from "lucide-react";
+import { Activity, AlertTriangle, CheckCircle2, CircleX, Info, MapPin, Phone, RefreshCw, ScanLine } from "lucide-react";
 import { Participant } from "@/lib/types";
 
 type ScanState =
@@ -115,18 +115,44 @@ export default function CheckInPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-2xl space-y-6 px-3 py-5 sm:px-6 sm:py-8">
+    <div className="mx-auto w-full max-w-2xl space-y-3 px-3 py-5 sm:px-6 sm:py-8">
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-900">Event Check-In</h1>
-        <p className="text-sm text-slate-500">Scan an attendee QR code to check them in</p>
+        <h1 className="text-xl font-extrabold text-slate-900 sm:text-2xl">Event Check-In</h1>
+        <p className="text-xs text-slate-500 sm:text-sm">Scan an attendee QR code to check them in</p>
       </div>
 
       {state.status === "idle" && (
         <>
-          <div id="qr-reader" className="rounded-2xl overflow-hidden bg-slate-900 aspect-square" />
+          <div className="overflow-hidden rounded-2xl bg-[#0c1628] shadow-sm">
+            <div id="qr-reader" className="relative aspect-[4/3] overflow-hidden bg-[#0c1628]" />
+            <div className="flex items-center gap-2 border-t border-white/5 px-3 py-2.5 text-[10px] text-slate-400">
+              <Info aria-hidden="true" className="h-4 w-4 rounded-full bg-slate-700 p-0.5 text-slate-300" />
+              Hold camera steady · Auto-scan in 2–3 seconds
+            </div>
+          </div>
 
-          <div className="space-y-2 rounded-2xl bg-white p-4 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <div className="rounded-2xl bg-white p-3 shadow-sm">
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">
+              Simulated QR Scan
+            </p>
+            <div className="space-y-1">
+              {[
+                ["MS", "Maria Schmidt", "OAK-2026-7842-XXPH", "Partner"],
+                ["JO", "James Odhiambo", "OAK-2026-1193-YQAJ", "OAK Staff"],
+                ["AD", "Awa Diallo", "OAK-2026-5531-AQGE", "Coordination Team"],
+                ["FZB", "Fatima Z. Benali", "OAK-2026-9312-NKHJ", "Partner"],
+              ].map(([initials, name, code, role]) => (
+                <button key={code} onClick={() => handleScan(code)} className="flex w-full items-center gap-2 rounded-xl border border-slate-100 px-2 py-2 text-left transition hover:bg-slate-50">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#162e55] text-[9px] font-bold text-white">{initials}</span>
+                  <span className="min-w-0 flex-1"><span className="block truncate text-[11px] font-semibold text-slate-700">{name}</span><span className="block text-[8px] text-slate-400">{code}</span></span>
+                  <span className="rounded-full bg-slate-100 px-2 py-1 text-[8px] font-semibold text-[#162e55]">{role}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-2 rounded-2xl bg-white p-3 shadow-sm">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">
               Manual Code Entry
             </p>
             <div className="flex flex-col gap-2 sm:flex-row">
