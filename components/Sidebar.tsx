@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { CalendarDays, ClipboardCheck, LayoutGrid, UsersRound, type LucideIcon } from "lucide-react";
+import { CalendarDays, ClipboardCheck, LayoutGrid, UserRound, UsersRound, type LucideIcon } from "lucide-react";
 import { ACCESS_MATRIX, UserRole, canAccess } from "@/lib/types";
 
 const NAV_ITEMS: { href: string; label: string; page: keyof typeof ACCESS_MATRIX; icon: LucideIcon }[] = [
+  { href: "/register", label: "Register", page: "registration", icon: UserRound },
   { href: "/check-in", label: "Check In", page: "check_in_page", icon: ClipboardCheck },
   { href: "/program", label: "Programme", page: "program_page", icon: CalendarDays },
   { href: "/partners", label: "Partners", page: "partners_page", icon: LayoutGrid },
@@ -16,27 +18,33 @@ export default function Sidebar({ role }: { role: UserRole | null }) {
   const pathname = usePathname();
 
   return (
-    <aside className="border-b border-[#244578] bg-[#162e55] px-3 py-4 lg:sticky lg:top-0 lg:min-h-screen lg:w-64 lg:shrink-0 lg:border-b-0 lg:border-r lg:border-slate-200 lg:bg-white lg:px-4 lg:py-6">
-      <div className="mb-4 px-2 lg:mb-8">
-        <img
+    <aside className="border-b border-slate-200 bg-white px-3 py-4 md:sticky md:top-0 md:min-h-screen md:w-52 md:shrink-0 md:border-b-0 md:border-r md:px-4 md:py-6">
+      <div className="mb-4 px-2 md:mb-8">
+        <Image
           src="/oak-removebg-preview.png"
           alt="OAK Foundation Partner Convening 2026"
-          className="h-auto w-full max-w-[210px]"
+          width={150}
+          height={58}
+          className="h-auto w-full max-w-[150px]"
+          priority
         />
       </div>
 
-      <nav className="flex flex-wrap gap-2 lg:block lg:space-y-1">
-        {NAV_ITEMS.filter((item) => canAccess(item.page, role)).map((item) => {
+      <nav className="flex flex-wrap gap-2 md:block md:space-y-1">
+        {NAV_ITEMS.filter((item) => role === null
+          ? item.page === "registration"
+          : canAccess(item.page, role)
+        ).map((item) => {
           const active = pathname === item.href;
           const Icon = item.icon;
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex min-w-[calc(50%-0.25rem)] flex-1 items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium transition sm:min-w-0 sm:flex-none lg:w-full ${
+              className={`flex min-w-[calc(50%-0.25rem)] flex-1 items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium transition sm:min-w-0 sm:flex-none md:w-full ${
                 active
-                  ? "bg-white text-[#162e55] lg:bg-[#0f1f3d] lg:text-white"
-                  : "text-blue-50 hover:bg-white/10 lg:text-slate-600 lg:hover:bg-slate-100"
+                  ? "bg-[#0f1f3d] text-white shadow-[0_6px_14px_rgba(15,31,61,0.18)]"
+                  : "text-slate-600 hover:bg-slate-100"
               }`}
             >
               <Icon aria-hidden="true" className="h-4 w-4 shrink-0" strokeWidth={1.8} />
@@ -46,8 +54,8 @@ export default function Sidebar({ role }: { role: UserRole | null }) {
         })}
       </nav>
 
-      <div className="mt-4 px-2 text-xs text-blue-100 lg:absolute lg:bottom-6 lg:left-4 lg:right-4 lg:mt-0 lg:text-slate-500">
-        <div className="font-medium text-white lg:text-slate-700">Harare, Zimbabwe</div>
+      <div className="mt-4 px-2 text-xs text-slate-500 md:absolute md:bottom-6 md:left-4 md:right-4 md:mt-0">
+        <div className="font-medium text-slate-700">Harare, Zimbabwe</div>
         <div>9–11 November 2026</div>
       </div>
     </aside>
