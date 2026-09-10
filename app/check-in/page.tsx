@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Html5Qrcode } from "html5-qrcode";
-import { AlertTriangle, CircleX, Phone, RefreshCw } from "lucide-react";
+import { Activity, AlertTriangle, CheckCircle2, CircleX, MapPin, Phone, RefreshCw, ScanLine } from "lucide-react";
 import { Participant } from "@/lib/types";
 
 type ScanState =
@@ -148,31 +148,75 @@ function SuccessCard({
   onNext: () => void;
 }) {
   return (
-    <div className="space-y-4">
-      <div className="rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white p-6">
-        <p className="font-bold text-lg">Checked In Successfully</p>
-        <p className="text-emerald-50 text-sm">
-          {participant.check_in_time && new Date(participant.check_in_time).toLocaleTimeString()}
-        </p>
+    <div className="space-y-3">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-400 p-5 text-white shadow-sm sm:p-6">
+        <div className="absolute -right-8 -top-10 h-32 w-32 rounded-full bg-white/10" />
+        <div className="relative flex items-center gap-3">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/15">
+            <CheckCircle2 aria-hidden="true" className="h-6 w-6" />
+          </div>
+          <div>
+            <p className="text-lg font-extrabold">Checked In Successfully</p>
+            <p className="mt-1 text-sm text-emerald-50">
+              {participant.check_in_time && new Date(participant.check_in_time).toLocaleTimeString()} · 9 November 2026
+            </p>
+          </div>
+        </div>
       </div>
-      <div className="bg-white rounded-2xl p-6 shadow-sm space-y-1">
-        <p className="font-bold text-slate-900">
-          {participant.first_name} {participant.last_name}
-        </p>
-        <p className="text-slate-500 text-sm">{participant.organisation}</p>
-        <p className="text-slate-500 text-sm">
-          Registration: {participant.registration_status === "registered" ? "Registered" : "Cancelled"}
-        </p>
-        <span className="inline-block mt-2 text-xs font-medium bg-slate-100 rounded-full px-3 py-1">
-          {participant.role.replace("_", " ")}
-        </span>
+
+      <div className="rounded-2xl bg-white p-5 shadow-sm sm:p-6">
+        <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#162e55] text-sm font-bold text-white">
+            {participant.first_name[0]}{participant.last_name[0]}
+          </div>
+          <div className="min-w-0">
+            <p className="font-bold text-slate-900">{participant.first_name} {participant.last_name}</p>
+            <p className="truncate text-sm text-slate-500">{participant.organisation}</p>
+            <span className="mt-1 inline-block rounded-full bg-[#eef2f7] px-2 py-0.5 text-[10px] font-semibold text-[#162e55]">
+              {participant.role.replace("_", " ")}
+            </span>
+          </div>
+        </div>
+        <div className="mt-4 grid grid-cols-2 gap-2">
+          <InfoTile icon={Activity} label="Next Session" value="Opening Plenary" />
+          <InfoTile icon={MapPin} label="Venue" value="Main Hall A" />
+        </div>
       </div>
+
+      <div className="rounded-2xl bg-white p-5 shadow-sm sm:p-6">
+        <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+          <Activity aria-hidden="true" className="h-3 w-3" />
+          Live Event Status
+        </p>
+        <p className="mt-3 flex items-center gap-2 text-sm font-semibold text-slate-700">
+          <span className="h-2 w-2 rounded-full bg-emerald-500" />
+          Opening Plenary starting at 09:30
+        </p>
+        <p className="mt-1 text-xs text-slate-400">74 of 110 attendees checked in · Main Hall A</p>
+        <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-200">
+          <div className="h-full w-[67%] rounded-full bg-[#294a80]" />
+        </div>
+      </div>
+
       <button
         onClick={onNext}
-        className="w-full rounded-xl bg-[#0f1f3d] py-3 font-semibold text-white"
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#162e55] py-3.5 font-semibold text-white shadow-sm transition hover:bg-[#0f1f3d]"
       >
+        <ScanLine aria-hidden="true" className="h-4 w-4" />
         Scan Next Attendee
       </button>
+    </div>
+  );
+}
+
+function InfoTile({ icon: Icon, label, value }: { icon: typeof Activity; label: string; value: string }) {
+  return (
+    <div className="rounded-xl bg-[#eef2f7] p-3">
+      <p className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide text-slate-400">
+        <Icon aria-hidden="true" className="h-3 w-3" />
+        {label}
+      </p>
+      <p className="mt-1 text-xs font-bold text-slate-700">{value}</p>
     </div>
   );
 }

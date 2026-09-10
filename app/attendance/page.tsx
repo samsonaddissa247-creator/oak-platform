@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { ScanLine, UsersRound } from "lucide-react";
 import { ROLE_LABELS, UserRole } from "@/lib/types";
 
 interface Row {
@@ -85,7 +86,38 @@ export default function AttendancePage() {
         <p className="text-sm text-slate-500">Check-in tracking · 9–11 November 2026</p>
       </div>
 
-      {stats && (
+      {stats && stats.totalRegistered === 0 && (
+        <>
+          <div className="rounded-2xl bg-white p-8 text-center shadow-sm sm:p-10">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#eef2f7] text-[#9db4d1]">
+              <UsersRound aria-hidden="true" className="h-8 w-8" strokeWidth={1.5} />
+            </div>
+            <h2 className="mt-5 text-lg font-extrabold text-slate-900">No check-ins yet</h2>
+            <p className="mx-auto mt-1 max-w-sm text-sm leading-6 text-slate-400">
+              Attendees will appear here once they have been scanned in at the event entrance.
+            </p>
+            <a
+              href="/check-in"
+              className="mx-auto mt-5 flex w-fit items-center gap-2 rounded-xl bg-[#162e55] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0f1f3d]"
+            >
+              <ScanLine aria-hidden="true" className="h-4 w-4" />
+              Go to Check-In Scanner
+            </a>
+          </div>
+          <div className="rounded-2xl bg-white p-4 shadow-sm">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+              Event Overview
+            </p>
+            <div className="grid grid-cols-3 gap-2 sm:gap-3">
+              <StatCard label="Expected" value={stats.totalRegistered} />
+              <StatCard label="Checked In" value={stats.totalAttendees} />
+              <StatCard label="Pending" value={stats.totalRegistered - stats.totalAttendees} />
+            </div>
+          </div>
+        </>
+      )}
+
+      {stats && stats.totalRegistered > 0 && (
         <div className="grid gap-4 sm:grid-cols-3">
           <StatCard label="Expected" value={stats.totalRegistered} />
           <StatCard label="Checked In" value={stats.totalAttendees} />
@@ -93,7 +125,7 @@ export default function AttendancePage() {
         </div>
       )}
 
-      {stats && (
+      {stats && stats.totalRegistered > 0 && (
         <div className="bg-white rounded-2xl p-4 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-3">
             Role Breakdown
@@ -111,7 +143,7 @@ export default function AttendancePage() {
         </div>
       )}
 
-      <div className="space-y-3 rounded-2xl bg-white p-4 shadow-sm">
+      {stats && stats.totalRegistered > 0 && <div className="space-y-3 rounded-2xl bg-white p-4 shadow-sm">
         <div className="flex flex-col gap-3 lg:flex-row">
           <input
             className="input flex-1"
@@ -193,7 +225,7 @@ export default function AttendancePage() {
           </tbody>
           </table>
         </div>
-      </div>
+      </div>}
     </div>
   );
 }

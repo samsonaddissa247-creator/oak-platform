@@ -80,6 +80,10 @@ export default function QrCodePage() {
         <dl className="divide-y divide-slate-100 text-sm">
           <Row icon={CalendarDays} label="Event Dates" value={process.env.NEXT_PUBLIC_EVENT_DATES || "9–11 November 2026"} />
           <Row icon={MapPin} label="Venue" value={process.env.NEXT_PUBLIC_EVENT_VENUE || "Cresta Lodge, Msasa, Harare"} />
+          <Row label="Name" value={`${participant.first_name} ${participant.last_name}`} />
+          <Row label="Organisation" value={participant.organisation} />
+          <Row label="Role" value={participant.role.replace("_", " ")} />
+          <Row label="Email" value={participant.email} />
           <Row label="Registration ID" value={participant.registration_id} />
         </dl>
       </div>
@@ -91,6 +95,9 @@ export default function QrCodePage() {
         <Download aria-hidden="true" className="h-4 w-4" />
         Download QR Code
       </button>
+      <a href="/register" className="block text-center text-sm text-slate-400 transition hover:text-[#162e55]">
+        ↻ Register another attendee
+      </a>
     </div>
   );
 }
