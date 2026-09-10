@@ -27,6 +27,7 @@ export default function Sidebar({ role }: { role: UserRole | null }) {
             width={180}
             height={90}
             className="absolute left-[-18px] top-[-20px] h-auto max-w-none brightness-0 invert"
+            priority
           />
         </div>
         <span className="h-7 w-px bg-[#91a4c4]/40" aria-hidden="true" />

@@ -76,9 +76,6 @@ export default function RegisterPage() {
   return (
     <div className="mx-auto w-full max-w-3xl px-2.5 py-3 sm:px-6 sm:py-8">
       <div className="mb-2.5 rounded-xl bg-[#162e55] p-3.5 text-white shadow-sm sm:mb-3 sm:rounded-2xl sm:p-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-200">
-          OAK Foundation
-        </p>
         <div className="mt-1.5 flex flex-col justify-between gap-2 sm:mt-2 sm:flex-row sm:items-end sm:gap-3">
           <div>
             <h1 className="text-[21px] font-extrabold leading-tight sm:text-3xl">Partner <br />Convening 2026</h1>
